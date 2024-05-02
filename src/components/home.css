@@ -1,0 +1,244 @@
+body {
+    background-color: aqua;
+    margin: 0;
+    font-family: "Caveat", cursive;
+    font-size: 2rem;
+    background-color: #c3cde8;
+}
+
+.modal {
+    display: block;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 10px;
+    border: 1px solid #888;
+    width: 60%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .footer {
+    text-align: left;
+    margin-top: 20px;
+    font-size: 0.8rem;
+    color: #888;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin-bottom: 10px;
+   
+  }
+  
+  .todo-button {
+    text-align: center;
+    margin-bottom: 5px;
+  }
+  
+ 
+  
+.todo-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Align cards in the center horizontally */
+   
+    margin-bottom: 5%;
+}
+
+.paper {
+    --paper-shadow: #c9bf8d;
+    --paper-dark: #e5c93d;
+    --paper-color: #ffed87;
+  
+    position: relative;
+    margin: 20px;
+    max-width: 250px;
+    min-width: 250px;
+    min-height: 175px;
+    background: linear-gradient(135deg, var(--paper-dark), 30%, var(--paper-color));
+    box-shadow: 3px 3px 2px var(--paper-shadow);
+    transform: rotate(10deg);
+    transform-origin: top left;
+    font-size: 1.5rem;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.paper p {
+    margin: revert;
+    text-align: center;
+}
+
+.paper input {
+    margin-left: 18%;
+    width: 70%;
+    max-width: 100%;
+    height: 70%;
+    margin-top: 6px;
+    background: transparent;
+}
+
+.pin {
+    --pin-color: #d02627;
+    --pin-dark: #9e0608;
+    --pin-light: #fc7e7d;
+  
+    position: absolute;
+    left: 20px;
+    width: 60px;
+    height: 50px;
+}
+.shadow {
+    position: absolute;
+    top: 18px;
+    left: -8px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: radial-gradient(var(--paper-shadow), 20%, rgba(201, 191, 141, 0));
+}
+
+.metal {
+    position: absolute;
+    width: 5px;
+    height: 20px;
+    background: linear-gradient(to right, #808080, 40%, #eae8e8, 50%, #808080);
+    border-radius: 0 0 30% 30%;
+    transform: rotate(50deg);
+    transform-origin: bottom left;
+    top: 15px;
+    border-bottom: 1px solid #808080;
+}
+
+.bottom-circle {
+    position: absolute;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--pin-color);
+    background: radial-gradient(
+      circle at bottom right,
+      var(--pin-light),
+      25%,
+      var(--pin-dark),
+      90%,
+      var(--pin-color)
+    );
+}
+
+/* Barrel */
+.bottom-circle::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -2px;
+    width: 20px;
+    height: 30px;
+    transform: rotate(55deg);
+    transform-origin: 100% 100%;
+    border-radius: 0 0 40% 40%;
+    background: linear-gradient(
+      to right,
+      var(--pin-dark),
+      30%,
+      var(--pin-color),
+      90%,
+      var(--pin-light)
+    );
+}
+
+/* Top circle */
+.bottom-circle::after {
+    content: "";
+    position: absolute;
+    right: -10px;
+    top: -5px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at right,
+      var(--pin-light),
+      30%,
+      var(--pin-color),
+      var(--pin-dark) 80%
+    );
+}
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .pagination button {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .pagination button:hover {
+    background-color: #e5e5e5;
+  }
+  
+  .pagination button.active {
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  .icons {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+.icons > * {
+    margin-right: 10px; 
+}
+
+@media (max-width: 768px) {
+    .paper {
+        justify-content: center; 
+    }
+    .modal-content{
+        margin-top: 50%;
+    }
+}
