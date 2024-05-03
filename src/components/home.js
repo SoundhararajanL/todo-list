@@ -109,7 +109,7 @@ export default function Home() {
     setEditText(todos[originalIndex].todolist); // Set editText to the todo text
   };
   const handleUpdateTodo = (id) => {
-    const newTodos = [...todos];
+    
     const data = {
       updatedTodo: editText,
     };
