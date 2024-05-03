@@ -20,7 +20,8 @@ export default function Home() {
   const [todosPerPage, setTodosPerPage] = useState(8);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/todolist")
+    axios
+      .get("http://localhost:3001/todolist")
       .then((response) => {
         setTodos(response.data);
       })
@@ -51,15 +52,15 @@ export default function Home() {
           todolist: todoText,
         };
 
-        axios.post("http://localhost:3001/storelist", data)
+        axios
+          .post("http://localhost:3001/storelist", data)
           .then((response) => {
             console.log(response.status, response.data.token);
           })
           .catch((error) => {
             console.error("Error while saving todo:", error);
           });
-      }
-       else {
+      } else {
         alert("To-do item should not exceed 50 characters.");
       }
     } else {
@@ -68,7 +69,8 @@ export default function Home() {
     window.location.reload();
   };
 
-  const handleDeleteTodo = (index) => {
+  // Client-Side Function
+  const handleDeleteTodo = (index, id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this todo?"
     );
@@ -76,6 +78,17 @@ export default function Home() {
       const newTodos = [...todos];
       newTodos.splice((currentPage - 1) * todosPerPage + index, 1);
       setTodos(newTodos);
+
+      axios
+        .delete(`http://localhost:3001/delete/${id}`)
+        .then((response) => {
+          console.log(response.status, response.data.token);
+          // Optionally, show a success message to the user
+        })
+        .catch((error) => {
+          console.error("Error while deleting todo:", error);
+          // Handle error gracefully, show an error message to the user
+        });
 
       if (currentTodos.length === 1 && currentPage !== 1) {
         setCurrentPage(currentPage - 1);
@@ -93,14 +106,26 @@ export default function Home() {
   const handleEditTodo = (index) => {
     const originalIndex = (currentPage - 1) * todosPerPage + index;
     setEditIndex(originalIndex);
-    setEditText(todos[originalIndex]);
+    setEditText(todos[originalIndex].todolist); // Set editText to the todo text
   };
-
-  const handleUpdateTodo = () => {
+  const handleUpdateTodo = (id) => {
     const newTodos = [...todos];
-    newTodos[editIndex] = editText;
-    setTodos(newTodos);
+    const data = {
+      updatedTodo: editText,
+    };
+
+    axios
+      .put(`http://localhost:3001/update/${id}`, data)
+      .then((response) => {
+        console.log(response.status, response.data.token);
+      })
+
+      .catch((error) => {
+        console.error("Error while saving todo:", error);
+      });
+
     setEditIndex(null);
+    window.location.reload();
   };
 
   const indexOfLastTodo = currentPage * todosPerPage;
@@ -113,10 +138,7 @@ export default function Home() {
   if (todos.length > todosPerPage) {
     for (
       let i = Math.max(1, currentPage - 2);
-      i <= Math.min(
-        Math.ceil(todos.length / todosPerPage),
-        currentPage + 2
-      );
+      i <= Math.min(Math.ceil(todos.length / todosPerPage), currentPage + 2);
       i++
     ) {
       pageNumbers.push(i);
@@ -141,7 +163,14 @@ export default function Home() {
   }, []);
   return (
     <div>
-      <h1 data-aos="zoom-out-down"   data-aos-duration="1000" data-aos-delay="50" className="title">Todo-list</h1>
+      <h1
+        data-aos="zoom-out-down"
+        data-aos-duration="1000"
+        data-aos-delay="50"
+        className="title"
+      >
+        Todo-list
+      </h1>
       <div className="todo-button">
         <button onClick={openModal}>Create to-do</button>
       </div>
@@ -184,9 +213,10 @@ export default function Home() {
                 <>
                   <FontAwesomeIcon
                     icon={faCheck}
-                    onClick={handleUpdateTodo}
+                    onClick={() => handleUpdateTodo(todo._id)}
                     className="check-icon"
                   />
+
                   <FontAwesomeIcon
                     icon={faTimes}
                     onClick={() => setEditIndex(null)}
@@ -197,7 +227,7 @@ export default function Home() {
                 <>
                   <FontAwesomeIcon
                     icon={faTrashAlt}
-                    onClick={() => handleDeleteTodo(index)}
+                    onClick={() => handleDeleteTodo(index, todo._id)}
                   />
                   <FontAwesomeIcon
                     icon={faEdit}
