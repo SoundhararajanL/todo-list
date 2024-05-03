@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+
 import {
   faTrashAlt,
   faEdit,
@@ -15,7 +17,17 @@ export default function Home() {
   const [editIndex, setEditIndex] = useState(null);
   const [editText, setEditText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [todosPerPage, setTodosPerPage] = useState(8); // Initially set to 8
+  const [todosPerPage, setTodosPerPage] = useState(8);
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/todolist")
+      .then((response) => {
+        setTodos(response.data);
+      })
+      .catch((error) => {
+        console.error("Error while fetching todo list:", error);
+      });
+  }, []);
 
   const openModal = () => {
     setShowModal(true);
@@ -28,21 +40,32 @@ export default function Home() {
 
   const handleInputChange = (event) => {
     setTodoText(event.target.value);
-    handleInputLength(event);
   };
 
   const handleSaveTodo = () => {
     if (todoText.trim() !== "") {
       if (todoText.length <= 50) {
-        setTodos([...todos, todoText]);
-        setTodoText("");
         closeModal();
-      } else {
+
+        const data = {
+          todolist: todoText,
+        };
+
+        axios.post("http://localhost:3001/storelist", data)
+          .then((response) => {
+            console.log(response.status, response.data.token);
+          })
+          .catch((error) => {
+            console.error("Error while saving todo:", error);
+          });
+      }
+       else {
         alert("To-do item should not exceed 50 characters.");
       }
     } else {
       alert("Please enter a to-do item.");
     }
+    window.location.reload();
   };
 
   const handleDeleteTodo = (index) => {
@@ -109,17 +132,16 @@ export default function Home() {
       }
     };
 
-    handleResize(); // Initial call to set todosPerPage based on initial screen size
-    window.addEventListener("resize", handleResize); // Add event listener for window resize
+    handleResize();
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize); // Remove event listener on component unmount
+      window.removeEventListener("resize", handleResize);
     };
-  }, []); // Empty dependency array to run only once on component mount
-
+  }, []);
   return (
     <div>
-      <h1 className="title">Todo-list</h1>
+      <h1 data-aos="zoom-out-down"   data-aos-duration="1000" data-aos-delay="50" className="title">Todo-list</h1>
       <div className="todo-button">
         <button onClick={openModal}>Create to-do</button>
       </div>
@@ -155,7 +177,7 @@ export default function Home() {
                 onChange={(e) => setEditText(e.target.value)}
               />
             ) : (
-              <p>{todo}</p>
+              <p>{todo.todolist}</p>
             )}
             <div className="icons">
               {editIndex === (currentPage - 1) * todosPerPage + index ? (
@@ -201,7 +223,7 @@ export default function Home() {
         </div>
       )}
       <footer className="footer">
-        All rights received by @Soundhararajan L
+        2024 All rights received by @Soundhararajan L
       </footer>
     </div>
   );
