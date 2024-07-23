@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-
 import {
   faTrashAlt,
   faEdit,
@@ -69,7 +68,6 @@ export default function Home() {
     window.location.reload();
   };
 
-  // Client-Side Function
   const handleDeleteTodo = (index, id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this todo?"
@@ -83,11 +81,9 @@ export default function Home() {
         .delete(`http://localhost:3001/delete/${id}`)
         .then((response) => {
           console.log(response.status, response.data.token);
-          // Optionally, show a success message to the user
         })
         .catch((error) => {
           console.error("Error while deleting todo:", error);
-          // Handle error gracefully, show an error message to the user
         });
 
       if (currentTodos.length === 1 && currentPage !== 1) {
@@ -96,20 +92,13 @@ export default function Home() {
     }
   };
 
-  const handleInputLength = (event) => {
-    const inputLength = event.target.value.length;
-    if (inputLength === 50) {
-      alert("To-do item has reached the maximum limit of 50 characters.");
-    }
-  };
-
   const handleEditTodo = (index) => {
     const originalIndex = (currentPage - 1) * todosPerPage + index;
     setEditIndex(originalIndex);
-    setEditText(todos[originalIndex].todolist); // Set editText to the todo text
+    setEditText(todos[originalIndex].todolist); 
   };
+
   const handleUpdateTodo = (id) => {
-    
     const data = {
       updatedTodo: editText,
     };
@@ -119,7 +108,6 @@ export default function Home() {
       .then((response) => {
         console.log(response.status, response.data.token);
       })
-
       .catch((error) => {
         console.error("Error while saving todo:", error);
       });
@@ -161,6 +149,7 @@ export default function Home() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
   return (
     <div>
       <h1
@@ -216,7 +205,6 @@ export default function Home() {
                     onClick={() => handleUpdateTodo(todo._id)}
                     className="check-icon"
                   />
-
                   <FontAwesomeIcon
                     icon={faTimes}
                     onClick={() => setEditIndex(null)}
